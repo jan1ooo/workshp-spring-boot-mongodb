@@ -7,7 +7,6 @@ import com.jan1ooo.workshopmongo.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +29,24 @@ public class UserService {
         return userRepository.insert(user);
     }
 
-    public User fromDTO(UserDTO user){
-        return new User(user.getId(), user.getName(), user.getEmail());
-    }
-
     public void deleteById(String id){
         findById(id);
         userRepository.deleteById(id);
     }
+
+    public User update(User obj){
+        User newObj = findById(obj.getId());
+        updateData(newObj, obj);
+        return userRepository.save(newObj);
+    }
+
+    private void updateData(User newObj, User obj){
+        newObj.setName(obj.getName());
+        newObj.setEmail(obj.getEmail());
+    }
+
+    public User fromDTO(UserDTO user){
+        return new User(user.getId(), user.getName(), user.getEmail());
+    }
+
 }
